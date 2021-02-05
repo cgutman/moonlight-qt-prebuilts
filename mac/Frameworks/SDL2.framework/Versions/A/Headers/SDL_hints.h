@@ -616,6 +616,11 @@ extern "C" {
  *
  *  Once extended reports are enabled, they can not be disabled without
  *  power cycling the controller.
+ *
+ *  For compatibility with applications written for versions of SDL prior
+ *  to the introduction of PS5 controller support, this value will also
+ *  control the state of extended reports on PS5 controllers when the
+ *  SDL_HINT_JOYSTICK_HIDAPI_PS5_RUMBLE hint is not explicitly set.
  */
 #define SDL_HINT_JOYSTICK_HIDAPI_PS4_RUMBLE "SDL_JOYSTICK_HIDAPI_PS4_RUMBLE"
 
@@ -642,6 +647,10 @@ extern "C" {
  *
  *  Once extended reports are enabled, they can not be disabled without
  *  power cycling the controller.
+ *
+ *  For compatibility with applications written for versions of SDL prior
+ *  to the introduction of PS5 controller support, this value defaults to
+ *  the value of SDL_HINT_JOYSTICK_HIDAPI_PS4_RUMBLE.
  */
 #define SDL_HINT_JOYSTICK_HIDAPI_PS5_RUMBLE "SDL_JOYSTICK_HIDAPI_PS5_RUMBLE"
 
@@ -653,6 +662,17 @@ extern "C" {
  *    "1"       - player LEDs are enabled (the default)
  */
 #define SDL_HINT_JOYSTICK_HIDAPI_PS5_PLAYER_LED "SDL_JOYSTICK_HIDAPI_PS5_PLAYER_LED"
+
+/**
+ *  \brief  A variable controlling whether the HIDAPI driver for Google Stadia controllers should be used.
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - HIDAPI driver is not used
+ *    "1"       - HIDAPI driver is used
+ *
+ *  The default is the value of SDL_HINT_JOYSTICK_HIDAPI
+ */
+#define SDL_HINT_JOYSTICK_HIDAPI_STADIA "SDL_JOYSTICK_HIDAPI_STADIA"
 
 /**
  *  \brief  A variable controlling whether the HIDAPI driver for Steam Controllers should be used.
@@ -675,6 +695,26 @@ extern "C" {
  *  The default is the value of SDL_HINT_JOYSTICK_HIDAPI
  */
 #define SDL_HINT_JOYSTICK_HIDAPI_SWITCH "SDL_JOYSTICK_HIDAPI_SWITCH"
+
+/**
+ *  \brief  A variable controlling whether the Home button LED should be turned on when a Nintendo Switch controller is opened
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - home button LED is left off
+ *    "1"       - home button LED is turned on (the default)
+ */
+#define SDL_HINT_JOYSTICK_HIDAPI_SWITCH_HOME_LED "SDL_JOYSTICK_HIDAPI_SWITCH_HOME_LED"
+
+ /**
+  *  \brief  A variable controlling whether Switch Joy-Cons should be treated the same as Switch Pro Controllers when using the HIDAPI driver.
+  *
+  *  This variable can be set to the following values:
+  *    "0"       - basic Joy-Con support with no analog input (the default)
+  *    "1"       - Joy-Cons treated as half full Pro Controllers with analog inputs and sensors
+  *
+  *  This does not combine Joy-Cons into a single controller. That's up to the user.
+  */
+#define SDL_HINT_JOYSTICK_HIDAPI_JOY_CONS "SDL_JOYSTICK_HIDAPI_JOY_CONS"
 
 /**
  *  \brief  A variable controlling whether the HIDAPI driver for XBox controllers should be used.
@@ -1547,6 +1587,19 @@ extern "C" {
  */
 #define SDL_HINT_AUDIO_DEVICE_STREAM_NAME "SDL_AUDIO_DEVICE_STREAM_NAME"
 
+/**
+ *  \brief Specify the behavior of Alt+Tab while the keyboard is grabbed.
+ *
+ * By default, SDL emulates Alt+Tab functionality while the keyboard is grabbed
+ * and your window is full-screen. This prevents the user from getting stuck in
+ * your application if you've enabled keyboard grab.
+ *
+ * The variable can be set to the following values:
+ *   "0"       - SDL will not handle Alt+Tab. Your application is responsible
+                 for handling Alt+Tab while the keyboard is grabbed.
+ *   "1"       - SDL will minimize your window when Alt+Tab is pressed (default)
+*/
+#define SDL_HINT_ALLOW_ALT_TAB_WHILE_GRABBED "SDL_ALLOW_ALT_TAB_WHILE_GRABBED"
 
 /**
  *  \brief Override for SDL_GetPreferredLocales()

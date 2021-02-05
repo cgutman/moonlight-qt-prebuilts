@@ -27,10 +27,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			PhgHozinkAzD8nahJaBZ1/oJU2g=
+			w5/7AI4jF9fn4qKfURU+h8d2H4c=
 			</data>
 			<key>requirement</key>
-			<string>identifier "org.libsdl.hidapi" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "45U78722YL"</string>
+			<string>cdhash H"ee19c730f317e365ee699d79a64a19d67742539c" or cdhash H"c39ffb008e2317d7e7e2a29f51153e87c7761f87" or cdhash H"88222d813275b181fb794f7261c71325f3dfdb00" or cdhash H"4312484a3a0761598aab2e465415f967c8cd91a5"</string>
 		</dict>
 		<key>Headers/SDL.h</key>
 		<dict>
@@ -234,11 +234,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Y7VSqYxvagfJ/LcXdw49dNy0jdQ=
+			bP2XKZrc5xr+wTtR8tf94ykTV5Q=
 			</data>
 			<key>hash2</key>
 			<data>
-			yBrr96jYaOpoX1i9R5BOdOrCU9ZX0YejzhvJY8tjKH8=
+			cFTm0XUP9qNwliOLeq4zi0/gbexRX3pf0ByDHxuUarc=
 			</data>
 		</dict>
 		<key>Headers/SDL_joystick.h</key>
@@ -630,11 +630,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			SRx/vJZF0gB/BMNwqk99jiFOzv0=
+			1sl3AitAA6vN2Xy1qIEFSEsUH+w=
 			</data>
 			<key>hash2</key>
 			<data>
-			/1aFRHr+7TVJ57vEMAOl6EtytMgiUb0ZN50zJD11gZo=
+			jReWeX9flVVAFwiPybJCthOsrxP0zybPF7z0gl0RKto=
 			</data>
 		</dict>
 		<key>Headers/SDL_thread.h</key>
@@ -696,11 +696,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			XaU9UXABuYIUptiZfOk+phppMTc=
+			76owLWMXQ6QQL3zaTC7MrHTYUz4=
 			</data>
 			<key>hash2</key>
 			<data>
-			KVerRbWCWaJETVDMBrl642aDRpTWAF9k9ys/DlSOUU8=
+			aZqldAeZXw5mqTiJ7AzG/tbmfzA/bBIgZmLwyd6VKg8=
 			</data>
 		</dict>
 		<key>Headers/SDL_vulkan.h</key>
