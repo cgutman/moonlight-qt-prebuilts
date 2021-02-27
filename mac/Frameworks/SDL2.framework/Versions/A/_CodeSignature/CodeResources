@@ -27,10 +27,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			w5/7AI4jF9fn4qKfURU+h8d2H4c=
+			bDnjLxa1XzMSxadMdmFP6uRbFiI=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"ee19c730f317e365ee699d79a64a19d67742539c" or cdhash H"c39ffb008e2317d7e7e2a29f51153e87c7761f87" or cdhash H"88222d813275b181fb794f7261c71325f3dfdb00" or cdhash H"4312484a3a0761598aab2e465415f967c8cd91a5"</string>
+			<string>cdhash H"14b93fb8b10cd427a3dd7f25bfaa441944449ded" or cdhash H"6c39e32f16b55f3312c5a74c76614feae45b1622" or cdhash H"8e4383b022166494527312c9ab6625b9aa79d0ea" or cdhash H"52c71fc752c392159ba54c7bb77707b9aefc6380"</string>
 		</dict>
 		<key>Headers/SDL.h</key>
 		<dict>
@@ -157,11 +157,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			hkyJa4gVy1aMdCZOAPK6cT7xNAE=
+			NzogH5K7jG/zWUseus1uXGua9zM=
 			</data>
 			<key>hash2</key>
 			<data>
-			SgvWbxqzwH7UcmOtDI3qTOgCKEIkSxWs5QY0k4RBBRs=
+			uf+FuJyw2honIQRl1RF8YTDXhQPAo9QN1tKgn0tRMgU=
 			</data>
 		</dict>
 		<key>Headers/SDL_error.h</key>
@@ -542,11 +542,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			ixjPDg2DQUEDn7ID2l4wMHDUvDk=
+			5JYRU0RGoJRCSAOAZE8qzfJ+ZEU=
 			</data>
 			<key>hash2</key>
 			<data>
-			LUUZKxelLmuZXjHwFWFSYH8HA96Px1JVmtuv79n+gYY=
+			A4GM0w4t3CrQCxMRBYNFIZzpSIpuoKTwQtrpC1/IM0E=
 			</data>
 		</dict>
 		<key>Headers/SDL_rwops.h</key>
@@ -597,11 +597,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			8BND4MMxaq5H6YuCjeFCnrmcn+k=
+			2G2nBYXqoQVffaByPTtxE5S4SOw=
 			</data>
 			<key>hash2</key>
 			<data>
-			tRQ15156KgHNyphV7ZJcgOUPgdCyJO0w3JIE/ulShuw=
+			YUO1J6yW7XOhbUdu7UO86ZPC6U43PRBX4zSVupDsD9w=
 			</data>
 		</dict>
 		<key>Headers/SDL_surface.h</key>
@@ -619,22 +619,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Z47HJw4GQ2OarNyHTgNpRoX8Rog=
+			9TeUTqcwVNr4SllIhbMhmg2XKs0=
 			</data>
 			<key>hash2</key>
 			<data>
-			djnyElj4XgGuzv0Cb7s7m6xAdQoyMZvaCr97rlHzZmE=
+			5R2nbOpNw3w8hAqFSoxowKvkFBNpMLnaz0UViZx1z44=
 			</data>
 		</dict>
 		<key>Headers/SDL_syswm.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			1sl3AitAA6vN2Xy1qIEFSEsUH+w=
+			ot8a+f7UhwpMRlbUII9cNPL5280=
 			</data>
 			<key>hash2</key>
 			<data>
-			jReWeX9flVVAFwiPybJCthOsrxP0zybPF7z0gl0RKto=
+			F12UUkpkUGQp0L19KIzpd0Bq6Kz/bDCGZF4p6VuWAQg=
 			</data>
 		</dict>
 		<key>Headers/SDL_thread.h</key>
@@ -685,11 +685,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			HDSpjbZplrIuvX2i6+4onoPlEOw=
+			gduqyWsOtV8mcjrbJLgJeaYOGUU=
 			</data>
 			<key>hash2</key>
 			<data>
-			bj2oig64kpZLOXbtKOGNX1E9Nc6TgUjGcmT5vZSVSmE=
+			4rjt0vYqKHIURVe+EgpbqwNY/IlnoC+7lgQfIMND8p8=
 			</data>
 		</dict>
 		<key>Headers/SDL_video.h</key>

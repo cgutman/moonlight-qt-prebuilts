@@ -96,6 +96,7 @@
 #define HAVE_WCSLEN 1
 /* #undef HAVE_WCSLCPY */
 /* #undef HAVE_WCSLCAT */
+#define HAVE__WCSDUP 1
 #define HAVE_WCSDUP 1
 #define HAVE_WCSSTR 1
 #define HAVE_WCSCMP 1
