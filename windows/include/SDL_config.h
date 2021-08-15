@@ -75,6 +75,7 @@
 /* #undef HAVE_LIBUNWIND_H */
 
 /* C library functions */
+/* #undef HAVE_DLOPEN */
 #define HAVE_MALLOC 1
 #define HAVE_CALLOC 1
 #define HAVE_REALLOC 1
@@ -221,9 +222,10 @@
 /* #undef HAVE_INOTIFY_INIT */
 /* #undef HAVE_INOTIFY_INIT1 */
 /* #undef HAVE_INOTIFY */
-/* #undef HAVE_IMMINTRIN_H */
+#define HAVE_IMMINTRIN_H 1
 /* #undef HAVE_LIBUDEV_H */
 /* #undef HAVE_LIBSAMPLERATE_H */
+/* #undef HAVE_LIBDECOR_H */
 
 #define HAVE_D3D_H 1
 #define HAVE_D3D11_H 1
@@ -264,6 +266,8 @@
 /* #undef SDL_AUDIO_DRIVER_ALSA */
 /* #undef SDL_AUDIO_DRIVER_ALSA_DYNAMIC */
 /* #undef SDL_AUDIO_DRIVER_ANDROID */
+/* #undef SDL_AUDIO_DRIVER_OPENSLES */
+/* #undef SDL_AUDIO_DRIVER_AAUDIO */
 /* #undef SDL_AUDIO_DRIVER_ARTS */
 /* #undef SDL_AUDIO_DRIVER_ARTS_DYNAMIC */
 /* #undef SDL_AUDIO_DRIVER_COREAUDIO */
@@ -284,6 +288,8 @@
 /* #undef SDL_AUDIO_DRIVER_OSS */
 /* #undef SDL_AUDIO_DRIVER_OSS_SOUNDCARD_H */
 /* #undef SDL_AUDIO_DRIVER_PAUDIO */
+/* #undef SDL_AUDIO_DRIVER_PIPEWIRE */
+/* #undef SDL_AUDIO_DRIVER_PIPEWIRE_DYNAMIC */
 /* #undef SDL_AUDIO_DRIVER_PULSEAUDIO */
 /* #undef SDL_AUDIO_DRIVER_PULSEAUDIO_DYNAMIC */
 /* #undef SDL_AUDIO_DRIVER_QSA */
@@ -293,10 +299,12 @@
 #define SDL_AUDIO_DRIVER_WASAPI 1
 #define SDL_AUDIO_DRIVER_WINMM 1
 /* #undef SDL_AUDIO_DRIVER_OS2 */
+/* #undef SDL_AUDIO_DRIVER_VITA */
 
 /* Enable various input drivers */
 /* #undef SDL_INPUT_LINUXEV */
 /* #undef SDL_INPUT_LINUXKD */
+/* #undef SDL_INPUT_FBSDKBIO */
 /* #undef SDL_JOYSTICK_ANDROID */
 /* #undef SDL_JOYSTICK_HAIKU */
 #define SDL_JOYSTICK_DINPUT 1
@@ -310,8 +318,10 @@
 /* #undef SDL_JOYSTICK_USBHID */
 /* #undef SDL_HAVE_MACHINE_JOYSTICK_H */
 #define SDL_JOYSTICK_HIDAPI 1
+#define SDL_JOYSTICK_RAWINPUT 1
 /* #undef SDL_JOYSTICK_EMSCRIPTEN */
 #define SDL_JOYSTICK_VIRTUAL 1
+/* #undef SDL_JOYSTICK_VITA */
 /* #undef SDL_HAPTIC_DUMMY */
 /* #undef SDL_HAPTIC_LINUX */
 /* #undef SDL_HAPTIC_IOKIT */
@@ -325,6 +335,7 @@
 /* #undef SDL_SENSOR_COREMOTION */
 #define SDL_SENSOR_WINDOWS 1
 /* #undef SDL_SENSOR_DUMMY */
+/* #undef SDL_SENSOR_VITA */
 
 /* Enable various shared object loading systems */
 /* #undef SDL_LOADSO_DLOPEN */
@@ -340,6 +351,7 @@
 /* #undef SDL_THREAD_PTHREAD_RECURSIVE_MUTEX_NP */
 #define SDL_THREAD_WINDOWS 1
 /* #undef SDL_THREAD_OS2 */
+/* #undef SDL_THREAD_VITA */
 
 /* Enable various timer systems */
 /* #undef SDL_TIMER_HAIKU */
@@ -347,6 +359,7 @@
 /* #undef SDL_TIMER_UNIX */
 #define SDL_TIMER_WINDOWS 1
 /* #undef SDL_TIMER_OS2 */
+/* #undef SDL_TIMER_VITA */
 
 /* Enable various video drivers */
 /* #undef SDL_VIDEO_DRIVER_ANDROID */
@@ -376,6 +389,7 @@
 /* #undef SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_EGL */
 /* #undef SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_CURSOR */
 /* #undef SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_XKBCOMMON */
+/* #undef SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_LIBDECOR */
 
 /* #undef SDL_VIDEO_DRIVER_X11 */
 /* #undef SDL_VIDEO_DRIVER_X11_DYNAMIC */
@@ -398,6 +412,7 @@
 /* #undef SDL_VIDEO_DRIVER_X11_SUPPORTS_GENERIC_EVENTS */
 /* #undef SDL_VIDEO_DRIVER_X11_CONST_PARAM_XEXTADDDISPLAY */
 /* #undef SDL_VIDEO_DRIVER_X11_HAS_XKBKEYCODETOKEYSYM */
+/* #undef SDL_VIDEO_DRIVER_VITA */
 
 #define SDL_VIDEO_RENDER_D3D 1
 #define SDL_VIDEO_RENDER_D3D11 1
@@ -406,6 +421,7 @@
 #define SDL_VIDEO_RENDER_OGL_ES2 1
 /* #undef SDL_VIDEO_RENDER_DIRECTFB */
 /* #undef SDL_VIDEO_RENDER_METAL */
+/* #undef SDL_VIDEO_RENDER_VITA_GXM */
 
 /* Enable OpenGL support */
 #define SDL_VIDEO_OPENGL 1
@@ -435,6 +451,7 @@
 /* #undef SDL_POWER_HAIKU */
 /* #undef SDL_POWER_EMSCRIPTEN */
 /* #undef SDL_POWER_HARDWIRED */
+/* #undef SDL_POWER_VITA */
 
 /* Enable system filesystem support */
 /* #undef SDL_FILESYSTEM_ANDROID */
@@ -445,6 +462,7 @@
 #define SDL_FILESYSTEM_WINDOWS 1
 /* #undef SDL_FILESYSTEM_EMSCRIPTEN */
 /* #undef SDL_FILESYSTEM_OS2 */
+/* #undef SDL_FILESYSTEM_VITA */
 
 /* Enable assembly routines */
 #define SDL_ASSEMBLY_ROUTINES 1
@@ -452,12 +470,17 @@
 /* #undef SDL_ARM_SIMD_BLITTERS */
 /* #undef SDL_ARM_NEON_BLITTERS */
 
+/* Whether SDL_DYNAMIC_API needs dlopen */
+/* #undef DYNAPI_NEEDS_DLOPEN */
+
 /* Enable dynamic libsamplerate support */
 /* #undef SDL_LIBSAMPLERATE_DYNAMIC */
 
 /* Platform specific definitions */
 /* #undef SDL_IPHONE_KEYBOARD */
 /* #undef SDL_IPHONE_LAUNCHSCREEN */
+
+/* #undef SDL_VIDEO_VITA_PIB */
 
 #if !defined(__WIN32__) && !defined(__WINRT__)
 #  if !defined(_STDINT_H_) && !defined(_STDINT_H) && !defined(HAVE_STDINT_H) && !defined(_HAVE_STDINT_H)

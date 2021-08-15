@@ -116,6 +116,17 @@ char *alloca();
 #endif
 
 /**
+ * Check if the compiler supports a given builtin.
+ * Supported by virtually all clang versions and recent gcc. Use this
+ * instead of checking the clang version if possible.
+ */
+#ifdef __has_builtin
+#define _SDL_HAS_BUILTIN(x) __has_builtin(x)
+#else
+#define _SDL_HAS_BUILTIN(x) 0
+#endif
+
+/**
  *  The number of elements in an array.
  */
 #define SDL_arraysize(array)    (sizeof(array)/sizeof(array[0]))
@@ -366,7 +377,7 @@ SDL_COMPILE_TIME_ASSERT(sint64, sizeof(Sint64) == 8);
 
 /** \cond */
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
-#if !defined(__ANDROID__)
+#if !defined(__ANDROID__) && !defined(__VITA__)
    /* TODO: include/SDL_stdinc.h:174: error: size of array 'SDL_dummy_enum' is negative */
 typedef enum
 {
@@ -403,7 +414,7 @@ typedef void *(SDLCALL *SDL_realloc_func)(void *mem, size_t size);
 typedef void (SDLCALL *SDL_free_func)(void *mem);
 
 /**
- *  \brief Get the current set of SDL memory functions
+ * Get the current set of SDL memory functions
  */
 extern DECLSPEC void SDLCALL SDL_GetMemoryFunctions(SDL_malloc_func *malloc_func,
                                                     SDL_calloc_func *calloc_func,
@@ -411,12 +422,7 @@ extern DECLSPEC void SDLCALL SDL_GetMemoryFunctions(SDL_malloc_func *malloc_func
                                                     SDL_free_func *free_func);
 
 /**
- *  \brief Replace SDL's memory allocation functions with a custom set
- *
- *  \note If you are replacing SDL's memory functions, you should call
- *        SDL_GetNumAllocations() and be very careful if it returns non-zero.
- *        That means that your free function will be called with memory
- *        allocated by the previous memory allocation functions.
+ * Replace SDL's memory allocation functions with a custom set
  */
 extern DECLSPEC int SDLCALL SDL_SetMemoryFunctions(SDL_malloc_func malloc_func,
                                                    SDL_calloc_func calloc_func,
@@ -424,7 +430,7 @@ extern DECLSPEC int SDLCALL SDL_SetMemoryFunctions(SDL_malloc_func malloc_func,
                                                    SDL_free_func free_func);
 
 /**
- *  \brief Get the number of outstanding (unfreed) allocations
+ * Get the number of outstanding (unfreed) allocations
  */
 extern DECLSPEC int SDLCALL SDL_GetNumAllocations(void);
 
@@ -435,10 +441,10 @@ extern DECLSPEC void SDLCALL SDL_qsort(void *base, size_t nmemb, size_t size, in
 
 extern DECLSPEC int SDLCALL SDL_abs(int x);
 
-/* !!! FIXME: these have side effects. You probably shouldn't use them. */
-/* !!! FIXME: Maybe we do forceinline functions of SDL_mini, SDL_minf, etc? */
+/* NOTE: these double-evaluate their arguments, so you should never have side effects in the parameters */
 #define SDL_min(x, y) (((x) < (y)) ? (x) : (y))
 #define SDL_max(x, y) (((x) > (y)) ? (x) : (y))
+#define SDL_clamp(x, a, b) (((x) < (a)) ? (a) : (((x) > (b)) ? (b) : (x)))
 
 extern DECLSPEC int SDLCALL SDL_isalpha(int x);
 extern DECLSPEC int SDLCALL SDL_isalnum(int x);
@@ -481,16 +487,28 @@ SDL_FORCE_INLINE void SDL_memset4(void *dst, Uint32 val, size_t dwords)
     size_t _n = (dwords + 3) / 4;
     Uint32 *_p = SDL_static_cast(Uint32 *, dst);
     Uint32 _val = (val);
-    if (dwords == 0)
+    if (dwords == 0) {
         return;
-    switch (dwords % 4)
-    {
+    }
+
+    /* !!! FIXME: there are better ways to do this, but this is just to clean this up for now. */
+    #ifdef __clang__
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wimplicit-fallthrough"
+    #endif
+
+    switch (dwords % 4) {
         case 0: do {    *_p++ = _val;   /* fallthrough */
         case 3:         *_p++ = _val;   /* fallthrough */
         case 2:         *_p++ = _val;   /* fallthrough */
         case 1:         *_p++ = _val;   /* fallthrough */
         } while ( --_n );
     }
+
+    #ifdef __clang__
+    #pragma clang diagnostic pop
+    #endif
+
 #endif
 }
 
@@ -613,8 +631,8 @@ extern DECLSPEC size_t SDLCALL SDL_iconv(SDL_iconv_t cd, const char **inbuf,
                                          size_t * inbytesleft, char **outbuf,
                                          size_t * outbytesleft);
 /**
- *  This function converts a string between encodings in one pass, returning a
- *  string that must be freed with SDL_free() or NULL on error.
+ * This function converts a string between encodings in one pass, returning a
+ * string that must be freed with SDL_free() or NULL on error.
  */
 extern DECLSPEC char *SDLCALL SDL_iconv_string(const char *tocode,
                                                const char *fromcode,

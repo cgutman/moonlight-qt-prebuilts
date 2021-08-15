@@ -31,6 +31,17 @@
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>Headers/hidapi.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			gc8b4gIKxU7ABL4GqVCqvsPoA4E=
+			</data>
+			<key>hash2</key>
+			<data>
+			aiZWfXpfEXpnoK9hTwui5rEr6YsIhFluDKNod9UtCos=
+			</data>
+		</dict>
 		<key>Resources/AUTHORS.txt</key>
 		<dict>
 			<key>hash</key>

@@ -30,7 +30,23 @@
 
 #include "SDL_stdinc.h"
 
-#if defined(_MSC_VER) && !defined(__clang__)
+#ifdef _MSC_VER
+/* As of Clang 11, '_m_prefetchw' is conflicting with the winnt.h's version,
+   so we define the needed '_m_prefetch' here as a pseudo-header, until the issue is fixed. */
+
+#ifdef __clang__
+#ifndef __PRFCHWINTRIN_H
+#define __PRFCHWINTRIN_H
+
+static __inline__ void __attribute__((__always_inline__, __nodebug__))
+_m_prefetch(void *__P)
+{
+  __builtin_prefetch (__P, 0, 3 /* _MM_HINT_T0 */);
+}
+
+#endif /* __PRFCHWINTRIN_H */
+#endif /* __clang__ */
+
 #include <intrin.h>
 #endif
 
@@ -49,7 +65,7 @@
 #elif defined(__OpenBSD__)
 #include <endian.h>
 #define SDL_BYTEORDER  BYTE_ORDER
-#elif defined(__FreeBSD__)
+#elif defined(__FreeBSD__) || defined(__NetBSD__)
 #include <sys/endian.h>
 #define SDL_BYTEORDER  BYTE_ORDER
 #else
@@ -75,7 +91,7 @@ extern "C" {
 /**
  *  \file SDL_endian.h
  */
-#if (defined(__clang__) && (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 2))) || \
+#if (_SDL_HAS_BUILTIN(__builtin_bswap16)) || \
     (defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8)))
 #define SDL_Swap16(x) __builtin_bswap16(x)
 #elif defined(__GNUC__) && defined(__i386__) && \
@@ -133,7 +149,7 @@ SDL_Swap16(Uint16 x)
 }
 #endif
 
-#if (defined(__clang__) && (__clang_major__ > 2 || (__clang_major__ == 2 && __clang_minor__ >= 6))) || \
+#if (_SDL_HAS_BUILTIN(__builtin_bswap32)) || \
     (defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)))
 #define SDL_Swap32(x) __builtin_bswap32(x)
 #elif defined(__GNUC__) && defined(__i386__) && \
@@ -194,7 +210,7 @@ SDL_Swap32(Uint32 x)
 }
 #endif
 
-#if (defined(__clang__) && (__clang_major__ > 2 || (__clang_major__ == 2 && __clang_minor__ >= 6))) || \
+#if (_SDL_HAS_BUILTIN(__builtin_bswap64)) || \
     (defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)))
 #define SDL_Swap64(x) __builtin_bswap64(x)
 #elif defined(__GNUC__) && defined(__i386__) && \
