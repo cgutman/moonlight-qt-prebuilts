@@ -204,7 +204,7 @@
 /* #undef HAVE_POLL */
 /* #undef HAVE__EXIT */
 
-#elif __WIN32__
+#elif defined(__WIN32__)
 /* #undef HAVE_STDARG_H */
 /* #undef HAVE_STDDEF_H */
 /* #undef HAVE_FLOAT_H */
@@ -222,7 +222,19 @@
 /* #undef HAVE_INOTIFY_INIT */
 /* #undef HAVE_INOTIFY_INIT1 */
 /* #undef HAVE_INOTIFY */
-#define HAVE_IMMINTRIN_H 1
+
+/* Apple platforms might be building universal binaries, where Intel builds
+   can use immintrin.h but other architectures can't. */
+#ifdef __APPLE__
+#  if defined(__has_include) && (defined(__i386__) || defined(__x86_64))
+#    if __has_include(<immintrin.h>)
+#       define HAVE_IMMINTRIN_H 1
+#    endif
+#  endif
+#else  /* non-Apple platforms can use the normal CMake check for this. */
+#  define HAVE_IMMINTRIN_H 1
+#endif
+
 /* #undef HAVE_LIBUDEV_H */
 /* #undef HAVE_LIBSAMPLERATE_H */
 /* #undef HAVE_LIBDECOR_H */
@@ -233,6 +245,7 @@
 #define HAVE_DSOUND_H 1
 #define HAVE_DINPUT_H 1
 #define HAVE_XINPUT_H 1
+#define HAVE_WINDOWS_GAMING_INPUT_H 1
 #define HAVE_DXGI_H 1
 
 #define HAVE_MMDEVICEAPI_H 1
@@ -307,6 +320,7 @@
 /* #undef SDL_INPUT_FBSDKBIO */
 /* #undef SDL_JOYSTICK_ANDROID */
 /* #undef SDL_JOYSTICK_HAIKU */
+#define SDL_JOYSTICK_WGI 1
 #define SDL_JOYSTICK_DINPUT 1
 #define SDL_JOYSTICK_XINPUT 1
 /* #undef SDL_JOYSTICK_DUMMY */
@@ -379,6 +393,7 @@
 /* #undef SDL_VIDEO_DRIVER_VIVANTE_VDK */
 /* #undef SDL_VIDEO_DRIVER_OS2 */
 /* #undef SDL_VIDEO_DRIVER_QNX */
+/* #undef SDL_VIDEO_DRIVER_RISCOS */
 
 /* #undef SDL_VIDEO_DRIVER_KMSDRM */
 /* #undef SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC */
@@ -410,7 +425,6 @@
 /* #undef SDL_VIDEO_DRIVER_X11_XSHAPE */
 /* #undef SDL_VIDEO_DRIVER_X11_XVIDMODE */
 /* #undef SDL_VIDEO_DRIVER_X11_SUPPORTS_GENERIC_EVENTS */
-/* #undef SDL_VIDEO_DRIVER_X11_CONST_PARAM_XEXTADDDISPLAY */
 /* #undef SDL_VIDEO_DRIVER_X11_HAS_XKBKEYCODETOKEYSYM */
 /* #undef SDL_VIDEO_DRIVER_VITA */
 
@@ -458,6 +472,7 @@
 /* #undef SDL_FILESYSTEM_HAIKU */
 /* #undef SDL_FILESYSTEM_COCOA */
 /* #undef SDL_FILESYSTEM_DUMMY */
+/* #undef SDL_FILESYSTEM_RISCOS */
 /* #undef SDL_FILESYSTEM_UNIX */
 #define SDL_FILESYSTEM_WINDOWS 1
 /* #undef SDL_FILESYSTEM_EMSCRIPTEN */
@@ -481,6 +496,7 @@
 /* #undef SDL_IPHONE_LAUNCHSCREEN */
 
 /* #undef SDL_VIDEO_VITA_PIB */
+/* #undef SDL_VIDEO_VITA_PVR */
 
 #if !defined(__WIN32__) && !defined(__WINRT__)
 #  if !defined(_STDINT_H_) && !defined(_STDINT_H) && !defined(HAVE_STDINT_H) && !defined(_HAVE_STDINT_H)
@@ -497,7 +513,7 @@ typedef unsigned long uintptr_t;
 #  endif /* if (stdint.h isn't available) */
 #else /* __WIN32__ */
 #  if !defined(_STDINT_H_) && !defined(HAVE_STDINT_H) && !defined(_HAVE_STDINT_H)
-#    if defined(__GNUC__) || defined(__DMC__) || defined(__WATCOMC__)
+#    if defined(__GNUC__) || defined(__DMC__) || defined(__WATCOMC__) || defined(__BORLANDC__) || defined(__CODEGEARC__)
 #define HAVE_STDINT_H	1
 #    elif defined(_MSC_VER)
 typedef signed __int8 int8_t;
