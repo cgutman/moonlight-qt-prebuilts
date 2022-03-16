@@ -277,6 +277,8 @@
 /* #undef SDL_VIDEO_DISABLED */
 /* #undef SDL_POWER_DISABLED */
 /* #undef SDL_FILESYSTEM_DISABLED */
+/* #undef SDL_LOCALE_DISABLED */
+/* #undef SDL_MISC_DISABLED */
 
 /* Enable various audio drivers */
 /* #undef SDL_AUDIO_DRIVER_ALSA */
@@ -490,6 +492,12 @@
 /* #undef SDL_FILESYSTEM_OS2 */
 /* #undef SDL_FILESYSTEM_VITA */
 /* #undef SDL_FILESYSTEM_PSP */
+
+/* Enable misc subsystem */
+/* #undef SDL_MISC_DUMMY */
+
+/* Enable locale subsystem */
+/* #undef SDL_LOCALE_DUMMY */
 
 /* Enable assembly routines */
 #define SDL_ASSEMBLY_ROUTINES 1
