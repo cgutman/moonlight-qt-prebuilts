@@ -28,7 +28,7 @@
 #ifndef SDL_stdinc_h_
 #define SDL_stdinc_h_
 
-#include "SDL_config.h"
+#include <SDL2/SDL_config.h>
 
 #ifdef __APPLE__
 #ifndef _DARWIN_C_SOURCE
@@ -234,6 +234,19 @@ typedef uint64_t Uint64;
 
 /* @} *//* Basic data types */
 
+/**
+ *  \name Floating-point constants
+ */
+/* @{ */
+
+#ifdef FLT_EPSILON
+#define SDL_FLT_EPSILON FLT_EPSILON
+#else
+#define SDL_FLT_EPSILON 1.1920928955078125e-07F /* 0x0.000002p0 */
+#endif
+
+/* @} *//* Floating-point constants */
+
 /* Make sure we have macros for printing width-based integers.
  * <stdint.h> should define these but this is not true all platforms.
  * (for example win32) */
@@ -395,7 +408,7 @@ SDL_COMPILE_TIME_ASSERT(enum, sizeof(SDL_DUMMY_ENUM) == sizeof(int));
 #endif /* DOXYGEN_SHOULD_IGNORE_THIS */
 /** \endcond */
 
-#include "begin_code.h"
+#include <SDL2/begin_code.h>
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus
 extern "C" {
@@ -450,6 +463,7 @@ extern DECLSPEC char *SDLCALL SDL_getenv(const char *name);
 extern DECLSPEC int SDLCALL SDL_setenv(const char *name, const char *value, int overwrite);
 
 extern DECLSPEC void SDLCALL SDL_qsort(void *base, size_t nmemb, size_t size, int (*compare) (const void *, const void *));
+extern DECLSPEC void * SDLCALL SDL_bsearch(const void *key, const void *base, size_t nmemb, size_t size, int (*compare) (const void *, const void *));
 
 extern DECLSPEC int SDLCALL SDL_abs(int x);
 
@@ -718,7 +732,7 @@ SDL_FORCE_INLINE void *SDL_memcpy4(SDL_OUT_BYTECAP(dwords*4) void *dst, SDL_IN_B
 #ifdef __cplusplus
 }
 #endif
-#include "close_code.h"
+#include <SDL2/close_code.h>
 
 #endif /* SDL_stdinc_h_ */
 

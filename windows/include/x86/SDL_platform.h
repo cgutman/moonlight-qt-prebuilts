@@ -65,11 +65,15 @@
 #undef __LINUX__ /* do we need to do this? */
 #define __ANDROID__ 1
 #endif
+#if defined(__NGAGE__)
+#undef __NGAGE__
+#define __NGAGE__ 1
+#endif
 
 #if defined(__APPLE__)
 /* lets us know what version of Mac OS X we're compiling on */
-#include "AvailabilityMacros.h"
-#include "TargetConditionals.h"
+#include <AvailabilityMacros.h>
+#include <TargetConditionals.h>
 
 /* Fix building with older SDKs that don't define these
    See this for more information:

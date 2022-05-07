@@ -39,9 +39,9 @@
 #ifndef SDL_hints_h_
 #define SDL_hints_h_
 
-#include "SDL_stdinc.h"
+#include <SDL2/SDL_stdinc.h>
 
-#include "begin_code.h"
+#include <SDL2/begin_code.h>
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus
 extern "C" {
@@ -392,13 +392,14 @@ extern "C" {
 #define SDL_HINT_ENABLE_STEAM_CONTROLLERS "SDL_ENABLE_STEAM_CONTROLLERS"
 
 /**
- *  \brief  A variable controlling whether SDL logs all events pushed onto its internal queue.
+ *  \brief  A variable controlling verbosity of the logging of SDL events pushed onto the internal queue.
  *
- *  This variable can be set to the following values:
+ *  This variable can be set to the following values, from least to most verbose:
  *
  *    "0"     - Don't log any events (default)
- *    "1"     - Log all events except mouse and finger motion, which are pretty spammy.
- *    "2"     - Log all events.
+ *    "1"     - Log most events (other than the really spammy ones).
+ *    "2"     - Include mouse and finger motion events.
+ *    "3"     - Include SDL_SysWMEvent events.
  *
  *  This is generally meant to be used to debug SDL itself, but can be useful
  *  for application developers that need better visibility into what is going
@@ -870,6 +871,24 @@ extern "C" {
   *  This variable is currently only used by the Linux joystick driver.
   */
 #define SDL_HINT_JOYSTICK_DEVICE "SDL_JOYSTICK_DEVICE"
+
+ /**
+  *  \brief  A variable controlling whether joysticks on Linux will always treat 'hat' axis inputs (ABS_HAT0X - ABS_HAT3Y) as 8-way digital hats without checking whether they may be analog.
+  *
+  *  This variable can be set to the following values:
+  *    "0"       - Only map hat axis inputs to digital hat outputs if the input axes appear to actually be digital (the default)
+  *    "1"       - Always handle the input axes numbered ABS_HAT0X to ABS_HAT3Y as digital hats
+  */
+#define SDL_HINT_LINUX_DIGITAL_HATS "SDL_LINUX_DIGITAL_HATS"
+
+ /**
+  *  \brief  A variable controlling whether digital hats on Linux will apply deadzones to their underlying input axes or use unfiltered values.
+  *
+  *  This variable can be set to the following values:
+  *    "0"       - Return digital hat values based on unfiltered input axis values
+  *    "1"       - Return digital hat values with deadzones on the input axes taken into account (the default)
+  */
+#define SDL_HINT_LINUX_HAT_DEADZONES "SDL_LINUX_HAT_DEADZONES"
 
  /**
   *  \brief  A variable controlling whether to use the classic /dev/input/js* joystick interface or the newer /dev/input/event* joystick interface on Linux
@@ -1476,6 +1495,20 @@ extern "C" {
 #define SDL_HINT_VIDEO_WAYLAND_ALLOW_LIBDECOR "SDL_VIDEO_WAYLAND_ALLOW_LIBDECOR"
 
 /**
+ *  \brief  A variable controlling whether the libdecor Wayland backend is preferred over native decrations.
+ *
+ *  When this hint is set, libdecor will be used to provide window decorations, even if xdg-decoration is
+ *  available. (Note that, by default, libdecor will use xdg-decoration itself if available).
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - libdecor is enabled only if server-side decorations are unavailable.
+ *    "1"       - libdecor is always enabled if available.
+ *
+ *  libdecor is used over xdg-shell when xdg-decoration protocol is unavailable.
+ */
+#define SDL_HINT_VIDEO_WAYLAND_PREFER_LIBDECOR "SDL_VIDEO_WAYLAND_PREFER_LIBDECOR"
+
+/**
 *  \brief  A variable that is the address of another SDL_Window* (as a hex string formatted with "%p").
 *  
 *  If this hint is set before SDL_CreateWindowFrom() and the SDL_Window* it is set to has
@@ -1576,13 +1609,11 @@ extern "C" {
 #define SDL_HINT_VIDEO_X11_WINDOW_VISUALID      "SDL_VIDEO_X11_WINDOW_VISUALID"
 
 /**
- *  \brief  A variable controlling whether the X11 Xinerama extension should be used.
+ *  \brief  A no-longer-used variable controlling whether the X11 Xinerama extension should be used.
  *
- *  This variable can be set to the following values:
- *    "0"       - Disable Xinerama
- *    "1"       - Enable Xinerama
- *
- *  By default SDL will use Xinerama if it is available.
+ * Before SDL 2.0.24, this would let apps and users disable Xinerama support on X11.
+ *  Now SDL never uses Xinerama, and does not check for this hint at all.
+ *  The preprocessor define is left here for source compatibility.
  */
 #define SDL_HINT_VIDEO_X11_XINERAMA         "SDL_VIDEO_X11_XINERAMA"
 
@@ -1593,18 +1624,16 @@ extern "C" {
  *    "0"       - Disable XRandR
  *    "1"       - Enable XRandR
  *
- *  By default SDL will not use XRandR because of window manager issues.
+ *  By default SDL will use XRandR.
  */
 #define SDL_HINT_VIDEO_X11_XRANDR           "SDL_VIDEO_X11_XRANDR"
 
 /**
- *  \brief  A variable controlling whether the X11 VidMode extension should be used.
+ *  \brief  A no-longer-used variable controlling whether the X11 VidMode extension should be used.
  *
- *  This variable can be set to the following values:
- *    "0"       - Disable XVidMode
- *    "1"       - Enable XVidMode
- *
- *  By default SDL will use XVidMode if it is available.
+ * Before SDL 2.0.24, this would let apps and users disable XVidMode support on X11.
+ *  Now SDL never uses XVidMode, and does not check for this hint at all.
+ *  The preprocessor define is left here for source compatibility.
  */
 #define SDL_HINT_VIDEO_X11_XVIDMODE         "SDL_VIDEO_X11_XVIDMODE"
 
@@ -1950,8 +1979,7 @@ extern "C" {
  *  If not set or set to "", this hint is ignored. This hint must be set
  *  before the SDL_CreateWindow() call that it is intended to affect.
  *
- *  This hint is available since SDL 2.0.22. Before then, virtual devices are
- *  always ignored.
+ *  This hint is available since SDL 2.0.22.
  */
 #define SDL_HINT_X11_WINDOW_TYPE "SDL_X11_WINDOW_TYPE"
 
@@ -1978,6 +2006,53 @@ extern "C" {
  *  an SDL_QUIT event when closing the final window.
  */
 #define SDL_HINT_QUIT_ON_LAST_WINDOW_CLOSE "SDL_QUIT_ON_LAST_WINDOW_CLOSE"
+
+
+/**
+ *  \brief  A variable that decides what video backend to use.
+ *
+ *  By default, SDL will try all available video backends in a reasonable
+ *  order until it finds one that can work, but this hint allows the app
+ *  or user to force a specific target, such as "x11" if, say, you are
+ *  on Wayland but want to try talking to the X server instead.
+ *
+ *  This functionality has existed since SDL 2.0.0 (indeed, before that)
+ *  but before 2.0.22 this was an environment variable only. In 2.0.22,
+ *  it was upgraded to a full SDL hint, so you can set the environment
+ *  variable as usual or programatically set the hint with SDL_SetHint,
+ *  which won't propagate to child processes.
+ *
+ *  The default value is unset, in which case SDL will try to figure out
+ *  the best video backend on your behalf. This hint needs to be set
+ *  before SDL_Init() is called to be useful.
+ *
+ *  This hint is available since SDL 2.0.22. Before then, you could set
+ *  the environment variable to get the same effect.
+ */
+#define SDL_HINT_VIDEODRIVER "SDL_VIDEODRIVER"
+
+/**
+ *  \brief  A variable that decides what audio backend to use.
+ *
+ *  By default, SDL will try all available audio backends in a reasonable
+ *  order until it finds one that can work, but this hint allows the app
+ *  or user to force a specific target, such as "alsa" if, say, you are
+ *  on PulseAudio but want to try talking to the lower level instead.
+ *
+ *  This functionality has existed since SDL 2.0.0 (indeed, before that)
+ *  but before 2.0.22 this was an environment variable only. In 2.0.22,
+ *  it was upgraded to a full SDL hint, so you can set the environment
+ *  variable as usual or programatically set the hint with SDL_SetHint,
+ *  which won't propagate to child processes.
+ *
+ *  The default value is unset, in which case SDL will try to figure out
+ *  the best audio backend on your behalf. This hint needs to be set
+ *  before SDL_Init() is called to be useful.
+ *
+ *  This hint is available since SDL 2.0.22. Before then, you could set
+ *  the environment variable to get the same effect.
+ */
+#define SDL_HINT_AUDIODRIVER "SDL_AUDIODRIVER"
 
 
 /**
@@ -2115,7 +2190,7 @@ extern DECLSPEC void SDLCALL SDL_ClearHints(void);
 #ifdef __cplusplus
 }
 #endif
-#include "close_code.h"
+#include <SDL2/close_code.h>
 
 #endif /* SDL_hints_h_ */
 

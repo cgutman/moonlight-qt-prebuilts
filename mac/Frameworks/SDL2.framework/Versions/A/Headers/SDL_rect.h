@@ -28,12 +28,12 @@
 #ifndef SDL_rect_h_
 #define SDL_rect_h_
 
-#include "SDL_stdinc.h"
-#include "SDL_error.h"
-#include "SDL_pixels.h"
-#include "SDL_rwops.h"
+#include <SDL2/SDL_stdinc.h>
+#include <SDL2/SDL_error.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_rwops.h>
 
-#include "begin_code.h"
+#include <SDL2/begin_code.h>
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus
 extern "C" {
@@ -54,11 +54,6 @@ typedef struct SDL_Point
 /**
  * The structure that defines a point (floating point)
  *
- * \sa SDL_FRectEmpty
- * \sa SDL_FRectEquals
- * \sa SDL_HasIntersectionF
- * \sa SDL_IntersectFRect
- * \sa SDL_UnionFRect
  * \sa SDL_EncloseFPoints
  * \sa SDL_PointInFRect
  */
@@ -76,6 +71,7 @@ typedef struct SDL_FPoint
  * \sa SDL_RectEquals
  * \sa SDL_HasIntersection
  * \sa SDL_IntersectRect
+ * \sa SDL_IntersectRectAndLine
  * \sa SDL_UnionRect
  * \sa SDL_EnclosePoints
  */
@@ -88,6 +84,16 @@ typedef struct SDL_Rect
 
 /**
  * A rectangle, with the origin at the upper left (floating point).
+ *
+ * \sa SDL_FRectEmpty
+ * \sa SDL_FRectEquals
+ * \sa SDL_FRectEqualsEpsilon
+ * \sa SDL_HasIntersectionF
+ * \sa SDL_IntersectFRect
+ * \sa SDL_IntersectFRectAndLine
+ * \sa SDL_UnionFRect
+ * \sa SDL_EncloseFPoints
+ * \sa SDL_PointInFRect
  */
 typedef struct SDL_FRect
 {
@@ -239,12 +245,28 @@ SDL_FORCE_INLINE SDL_bool SDL_FRectEmpty(const SDL_FRect *r)
 }
 
 /**
- * Returns true if the two rectangles are equal.
+ * Returns true if the two rectangles are equal, within some given epsilon.
+ *
+ * \since This function is available since SDL 2.0.22.
+ */
+SDL_FORCE_INLINE SDL_bool SDL_FRectEqualsEpsilon(const SDL_FRect *a, const SDL_FRect *b, const float epsilon)
+{
+    return (a && b && ((a == b) ||
+            ((SDL_fabs(a->x - b->x) <= epsilon) &&
+            (SDL_fabs(a->y - b->y) <= epsilon) &&
+            (SDL_fabs(a->w - b->w) <= epsilon) &&
+            (SDL_fabs(a->h - b->h) <= epsilon))))
+            ? SDL_TRUE : SDL_FALSE;
+}
+
+/**
+ * Returns true if the two rectangles are equal, using a default epsilon.
+ *
+ * \since This function is available since SDL 2.0.22.
  */
 SDL_FORCE_INLINE SDL_bool SDL_FRectEquals(const SDL_FRect *a, const SDL_FRect *b)
 {
-    return (a && b && (a->x == b->x) && (a->y == b->y) &&
-            (a->w == b->w) && (a->h == b->h)) ? SDL_TRUE : SDL_FALSE;
+    return SDL_FRectEqualsEpsilon(a, b, SDL_FLT_EPSILON);
 }
 
 /**
@@ -347,7 +369,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_IntersectFRectAndLine(const SDL_FRect *
 #ifdef __cplusplus
 }
 #endif
-#include "close_code.h"
+#include <SDL2/close_code.h>
 
 #endif /* SDL_rect_h_ */
 
