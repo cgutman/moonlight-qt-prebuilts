@@ -250,16 +250,14 @@ typedef unsigned int uintptr_t;
 /* Enable appropriate renderer(s) */
 #define SDL_VIDEO_RENDER_D3D11  1
 
+/* Disable D3D12 as it's not implemented for WinRT */
+#define SDL_VIDEO_RENDER_D3D12  0
+
 #if SDL_VIDEO_OPENGL_ES2
 #define SDL_VIDEO_RENDER_OGL_ES2 1
 #endif
 
 /* Enable system power support */
 #define SDL_POWER_WINRT 1
-
-/* Enable assembly routines (Win64 doesn't have inline asm) */
-#ifndef _WIN64
-#define SDL_ASSEMBLY_ROUTINES   1
-#endif
 
 #endif /* SDL_config_winrt_h_ */
