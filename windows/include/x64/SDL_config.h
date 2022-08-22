@@ -414,6 +414,7 @@
 /* #undef SDL_VIDEO_DRIVER_QNX */
 /* #undef SDL_VIDEO_DRIVER_RISCOS */
 /* #undef SDL_VIDEO_DRIVER_PSP */
+/* #undef SDL_VIDEO_DRIVER_PS2 */
 
 /* #undef SDL_VIDEO_DRIVER_KMSDRM */
 /* #undef SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC */
@@ -455,6 +456,7 @@
 /* #undef SDL_VIDEO_RENDER_DIRECTFB */
 /* #undef SDL_VIDEO_RENDER_METAL */
 /* #undef SDL_VIDEO_RENDER_VITA_GXM */
+/* #undef SDL_VIDEO_RENDER_PS2 */
 /* #undef SDL_VIDEO_RENDER_PSP */
 
 /* Enable OpenGL support */
