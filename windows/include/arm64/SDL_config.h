@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2022 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -332,6 +332,7 @@
 /* #undef SDL_INPUT_LINUXEV */
 /* #undef SDL_INPUT_LINUXKD */
 /* #undef SDL_INPUT_FBSDKBIO */
+/* #undef SDL_INPUT_WSCONS */
 /* #undef SDL_JOYSTICK_ANDROID */
 /* #undef SDL_JOYSTICK_HAIKU */
 /* #undef SDL_JOYSTICK_WGI */
@@ -359,6 +360,7 @@
 #define SDL_HAPTIC_XINPUT 1
 /* #undef SDL_HAPTIC_ANDROID */
 /* #undef SDL_LIBUSB_DYNAMIC */
+/* #undef SDL_UDEV_DYNAMIC */
 
 /* Enable various sensor drivers */
 /* #undef SDL_SENSOR_ANDROID */
@@ -539,7 +541,9 @@
 /* #undef SDL_VIDEO_VITA_PVR */
 /* #undef SDL_VIDEO_VITA_PVR_OGL */
 
-#if !defined(_STDINT_H_) && (!defined(HAVE_STDINT_H) || !_HAVE_STDINT_H)
+/* #undef SDL_HAVE_LIBDECOR_GET_MIN_MAX */
+
+#if !defined(HAVE_STDINT_H) && !defined(_STDINT_H_)
 /* Most everything except Visual Studio 2008 and earlier has stdint.h now */
 #if defined(_MSC_VER) && (_MSC_VER < 1600)
 typedef signed __int8 int8_t;
