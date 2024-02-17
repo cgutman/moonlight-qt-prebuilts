@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -49,7 +49,7 @@
 
 /* Comment this if you want to build without any C library requirements */
 #define HAVE_LIBC 1
-#if HAVE_LIBC
+#ifdef HAVE_LIBC
 
 /* Useful headers */
 #define STDC_HEADERS 1
@@ -200,6 +200,7 @@
 /* #undef HAVE_GETPAGESIZE */
 /* #undef HAVE_MPROTECT */
 /* #undef HAVE_ICONV */
+/* #undef SDL_USE_LIBICONV */
 /* #undef HAVE_PTHREAD_SETNAME_NP */
 /* #undef HAVE_PTHREAD_SET_NAME_NP */
 /* #undef HAVE_SEM_TIMEDWAIT */
@@ -258,9 +259,6 @@
 #define HAVE_SENSORSAPI_H 1
 #define HAVE_ROAPI_H 1
 #define HAVE_SHELLSCALINGAPI_H 1
-
-/* #undef HAVE_XINPUT_GAMEPAD_EX */
-/* #undef HAVE_XINPUT_STATE_EX */
 
 /* #undef USE_POSIX_SPAWN */
 
