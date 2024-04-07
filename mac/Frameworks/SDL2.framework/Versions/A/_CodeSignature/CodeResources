@@ -508,11 +508,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			wJW6P5cSLWw7CLKwCduRMFILJMs=
+			NywZ7lb1AObplGXdgvKYUQnFr3E=
 			</data>
 			<key>hash2</key>
 			<data>
-			rfvhg9xhDPbHHDguY5qvRo/mzZyCbJMSA9625XkbQy0=
+			/XPmip0lyp07Lnry52Ki2A7dornwXXFxn1W94/cdCO0=
 			</data>
 		</dict>
 		<key>Headers/SDL_power.h</key>
@@ -618,11 +618,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			PIRMBuyz3AvzjRzhE27KkDue7jw=
+			Nr/+Qxc2KH4SG4CAl9AHEBjc564=
 			</data>
 			<key>hash2</key>
 			<data>
-			Y3QmCQscBokS/69IsU1FFMnAT3y9gE2tvU0uJkkC5F4=
+			hGplqGOEq02R8fOdr8RdVz1Ns6Ub2TMn6cqyYQIXQ5o=
 			</data>
 		</dict>
 		<key>Headers/SDL_surface.h</key>
@@ -717,11 +717,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			YH5SyVC9XgoGpFkq3vCcdbQd0uI=
+			pX82tIowv8oxjV9VnqDdZ0zs0Ik=
 			</data>
 			<key>hash2</key>
 			<data>
-			Z5MS/bT5DfdUhSXGNao0cZWNyObx6ruc+zTPuGbg1s4=
+			ofilQEPL8l2lHFlkb5eyVJxIp5xXiqEUQR37lBvwBYo=
 			</data>
 		</dict>
 		<key>Headers/SDL_vulkan.h</key>
