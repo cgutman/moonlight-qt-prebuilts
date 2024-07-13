@@ -19,10 +19,12 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
+/* WIKI CATEGORY: StdInc */
+
 /**
- *  \file SDL_stdinc.h
+ * # CategoryStdInc
  *
- *  This is a general header that includes C language support.
+ * This is a general header that includes C language support.
  */
 
 #ifndef SDL_stdinc_h_
@@ -107,7 +109,7 @@
 # elif defined(__MRC__)
 void *alloca(unsigned);
 # else
-char *alloca();
+void *alloca(size_t);
 # endif
 #endif
 
@@ -129,15 +131,19 @@ char *alloca();
 #endif
 
 /**
- *  The number of elements in an array.
+ * The number of elements in an array.
  */
 #define SDL_arraysize(array)    (sizeof(array)/sizeof(array[0]))
 #define SDL_TABLESIZE(table)    SDL_arraysize(table)
 
 /**
- *  Macro useful for building other macros with strings in them
+ * Macro useful for building other macros with strings in them
  *
- *  e.g. #define LOG_ERROR(X) OutputDebugString(SDL_STRINGIFY_ARG(__FUNCTION__) ": " X "\n")
+ * e.g:
+ *
+ * ```c
+ * #define LOG_ERROR(X) OutputDebugString(SDL_STRINGIFY_ARG(__FUNCTION__) ": " X "\n")
+ * ```
  */
 #define SDL_STRINGIFY_ARG(arg)  #arg
 
@@ -185,50 +191,56 @@ typedef enum
 #endif
 
 /**
- * \brief A signed 8-bit integer type.
+ * A signed 8-bit integer type.
  */
 #define SDL_MAX_SINT8   ((Sint8)0x7F)           /* 127 */
 #define SDL_MIN_SINT8   ((Sint8)(~0x7F))        /* -128 */
 typedef int8_t Sint8;
+
 /**
- * \brief An unsigned 8-bit integer type.
+ * An unsigned 8-bit integer type.
  */
 #define SDL_MAX_UINT8   ((Uint8)0xFF)           /* 255 */
 #define SDL_MIN_UINT8   ((Uint8)0x00)           /* 0 */
 typedef uint8_t Uint8;
+
 /**
- * \brief A signed 16-bit integer type.
+ * A signed 16-bit integer type.
  */
 #define SDL_MAX_SINT16  ((Sint16)0x7FFF)        /* 32767 */
 #define SDL_MIN_SINT16  ((Sint16)(~0x7FFF))     /* -32768 */
 typedef int16_t Sint16;
+
 /**
- * \brief An unsigned 16-bit integer type.
+ * An unsigned 16-bit integer type.
  */
 #define SDL_MAX_UINT16  ((Uint16)0xFFFF)        /* 65535 */
 #define SDL_MIN_UINT16  ((Uint16)0x0000)        /* 0 */
 typedef uint16_t Uint16;
+
 /**
- * \brief A signed 32-bit integer type.
+ * A signed 32-bit integer type.
  */
 #define SDL_MAX_SINT32  ((Sint32)0x7FFFFFFF)    /* 2147483647 */
 #define SDL_MIN_SINT32  ((Sint32)(~0x7FFFFFFF)) /* -2147483648 */
 typedef int32_t Sint32;
+
 /**
- * \brief An unsigned 32-bit integer type.
+ * An unsigned 32-bit integer type.
  */
 #define SDL_MAX_UINT32  ((Uint32)0xFFFFFFFFu)   /* 4294967295 */
 #define SDL_MIN_UINT32  ((Uint32)0x00000000)    /* 0 */
 typedef uint32_t Uint32;
 
 /**
- * \brief A signed 64-bit integer type.
+ * A signed 64-bit integer type.
  */
 #define SDL_MAX_SINT64  ((Sint64)0x7FFFFFFFFFFFFFFFll)      /* 9223372036854775807 */
 #define SDL_MIN_SINT64  ((Sint64)(~0x7FFFFFFFFFFFFFFFll))   /* -9223372036854775808 */
 typedef int64_t Sint64;
+
 /**
- * \brief An unsigned 64-bit integer type.
+ * An unsigned 64-bit integer type.
  */
 #define SDL_MAX_UINT64  ((Uint64)0xFFFFFFFFFFFFFFFFull)     /* 18446744073709551615 */
 #define SDL_MIN_UINT64  ((Uint64)(0x0000000000000000ull))   /* 0 */
@@ -253,10 +265,10 @@ typedef uint64_t Uint64;
  * <stdint.h> should define these but this is not true all platforms.
  * (for example win32) */
 #ifndef SDL_PRIs64
-#ifdef PRIs64
-#define SDL_PRIs64 PRIs64
-#elif defined(__WIN32__) || defined(__GDK__)
+#if defined(__WIN32__) || defined(__GDK__)
 #define SDL_PRIs64 "I64d"
+#elif defined(PRIs64)
+#define SDL_PRIs64 PRIs64
 #elif defined(__LP64__) && !defined(__APPLE__)
 #define SDL_PRIs64 "ld"
 #else
@@ -264,10 +276,10 @@ typedef uint64_t Uint64;
 #endif
 #endif
 #ifndef SDL_PRIu64
-#ifdef PRIu64
-#define SDL_PRIu64 PRIu64
-#elif defined(__WIN32__) || defined(__GDK__)
+#if defined(__WIN32__) || defined(__GDK__)
 #define SDL_PRIu64 "I64u"
+#elif defined(PRIu64)
+#define SDL_PRIu64 PRIu64
 #elif defined(__LP64__) && !defined(__APPLE__)
 #define SDL_PRIu64 "lu"
 #else
@@ -275,10 +287,10 @@ typedef uint64_t Uint64;
 #endif
 #endif
 #ifndef SDL_PRIx64
-#ifdef PRIx64
-#define SDL_PRIx64 PRIx64
-#elif defined(__WIN32__) || defined(__GDK__)
+#if defined(__WIN32__) || defined(__GDK__)
 #define SDL_PRIx64 "I64x"
+#elif defined(PRIx64)
+#define SDL_PRIx64 PRIx64
 #elif defined(__LP64__) && !defined(__APPLE__)
 #define SDL_PRIx64 "lx"
 #else
@@ -286,10 +298,10 @@ typedef uint64_t Uint64;
 #endif
 #endif
 #ifndef SDL_PRIX64
-#ifdef PRIX64
-#define SDL_PRIX64 PRIX64
-#elif defined(__WIN32__) || defined(__GDK__)
+#if defined(__WIN32__) || defined(__GDK__)
 #define SDL_PRIX64 "I64X"
+#elif defined(PRIX64)
+#define SDL_PRIX64 PRIX64
 #elif defined(__LP64__) && !defined(__APPLE__)
 #define SDL_PRIX64 "lX"
 #else
@@ -488,8 +500,9 @@ extern DECLSPEC int SDLCALL SDL_GetNumAllocations(void);
 extern DECLSPEC char *SDLCALL SDL_getenv(const char *name);
 extern DECLSPEC int SDLCALL SDL_setenv(const char *name, const char *value, int overwrite);
 
-extern DECLSPEC void SDLCALL SDL_qsort(void *base, size_t nmemb, size_t size, int (SDLCALL *compare) (const void *, const void *));
-extern DECLSPEC void * SDLCALL SDL_bsearch(const void *key, const void *base, size_t nmemb, size_t size, int (SDLCALL *compare) (const void *, const void *));
+typedef int (SDLCALL *SDL_CompareCallback)(const void *, const void *);
+extern DECLSPEC void SDLCALL SDL_qsort(void *base, size_t nmemb, size_t size, SDL_CompareCallback compare);
+extern DECLSPEC void * SDLCALL SDL_bsearch(const void *key, const void *base, size_t nmemb, size_t size, SDL_CompareCallback compare);
 
 extern DECLSPEC int SDLCALL SDL_abs(int x);
 
@@ -518,6 +531,7 @@ extern DECLSPEC Uint32 SDLCALL SDL_crc32(Uint32 crc, const void *data, size_t le
 
 extern DECLSPEC void *SDLCALL SDL_memset(SDL_OUT_BYTECAP(len) void *dst, int c, size_t len);
 
+/* Some safe(r) macros for zero'ing structures... */
 #define SDL_zero(x) SDL_memset(&(x), 0, sizeof((x)))
 #define SDL_zerop(x) SDL_memset((x), 0, sizeof(*(x)))
 #define SDL_zeroa(x) SDL_memset((x), 0, sizeof((x)))
@@ -703,6 +717,8 @@ extern DECLSPEC char *SDLCALL SDL_iconv_string(const char *tocode,
                                                const char *fromcode,
                                                const char *inbuf,
                                                size_t inbytesleft);
+
+/* Some helper macros for common cases... */
 #define SDL_iconv_utf8_locale(S)    SDL_iconv_string("", "UTF-8", S, SDL_strlen(S)+1)
 #define SDL_iconv_utf8_ucs2(S)      (Uint16 *)SDL_iconv_string("UCS-2", "UTF-8", S, SDL_strlen(S)+1)
 #define SDL_iconv_utf8_ucs4(S)      (Uint32 *)SDL_iconv_string("UCS-4", "UTF-8", S, SDL_strlen(S)+1)
@@ -775,8 +791,9 @@ SDL_FORCE_INLINE void *SDL_memcpy4(SDL_OUT_BYTECAP(dwords*4) void *dst, SDL_IN_B
 }
 
 /**
- * If a * b would overflow, return -1. Otherwise store a * b via ret
- * and return 0.
+ * If a * b would overflow, return -1.
+ *
+ * Otherwise store a * b via ret and return 0.
  *
  * \since This function is available since SDL 2.24.0.
  */
@@ -805,8 +822,9 @@ SDL_FORCE_INLINE int _SDL_size_mul_overflow_builtin (size_t a,
 #endif
 
 /**
- * If a + b would overflow, return -1. Otherwise store a + b via ret
- * and return 0.
+ * If a + b would overflow, return -1.
+ *
+ * Otherwise store a + b via ret and return 0.
  *
  * \since This function is available since SDL 2.24.0.
  */
