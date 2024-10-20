@@ -68,11 +68,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			nlFSAH7rLG7sST0qKM6RDbv7nW0=
+			E037GwZyVH8qRpysis1R07DHDKQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			PZhC06KXrQLnfZXSfVXBaVsmatd5nW/QMQzVg3ZqwQc=
+			8Jcy5ETARxwbo0T94Y5n3nqMtKoNQd6wF9c3GLUY3Ec=
 			</data>
 		</dict>
 		<key>Headers/SDL_bits.h</key>
@@ -178,11 +178,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			RtU32jp4i8nZUPRT2gGjd9jqKrc=
+			9FPYdpEX72D5YKVuOBsrrH7RO1g=
 			</data>
 			<key>hash2</key>
 			<data>
-			H5ojRE/2idAz+iOQySfrlLXbJ7AyfwQkPN84xyeJrzw=
+			+Un43x9jH9vW7JGflnXGvjLg/FzBc3ojpZqlD7h8XAw=
 			</data>
 		</dict>
 		<key>Headers/SDL_filesystem.h</key>
@@ -552,11 +552,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			wwF84YgodEPiYqyuPxUPUeNSKfs=
+			OqVtA9ybq+ckmewmuNR4oCsosAg=
 			</data>
 			<key>hash2</key>
 			<data>
-			kl+iO1dU7UmjnrKn69MlQ8wiuaezT9WV+Njj89thMZE=
+			9hoyatmr3bD9/fR2EVhsYiDDcTjZ32dBDO3sHYA/rUs=
 			</data>
 		</dict>
 		<key>Headers/SDL_revision.h</key>
@@ -618,11 +618,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			GS6F/s82Zf1fYVqDEaOWO+m/OZY=
+			KYuhMp0WYGNaHfKd/lh0C2RCluk=
 			</data>
 			<key>hash2</key>
 			<data>
-			dnZo1rwOUpSeypNp1ZvC3MLpWHNGnqpinU4HX6z7kKg=
+			SqTkE4wD8exvZVNbVeWKyC84XgxppnX5J1KeQDuVLRQ=
 			</data>
 		</dict>
 		<key>Headers/SDL_surface.h</key>
