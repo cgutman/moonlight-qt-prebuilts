@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -1315,6 +1315,7 @@ extern DECLSPEC int SDLCALL SDL_SetWindowFullscreen(SDL_Window * window,
 /**
  * Return whether the window has a surface associated with it.
  *
+ * \param window the window to query.
  * \returns SDL_TRUE if there is a surface associated with the window, or
  *          SDL_FALSE otherwise.
  *

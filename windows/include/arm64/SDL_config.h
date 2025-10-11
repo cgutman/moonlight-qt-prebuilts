@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -193,6 +193,7 @@
 /* #undef HAVE_MEMFD_CREATE */
 /* #undef HAVE_POSIX_FALLOCATE */
 /* #undef HAVE_SIGACTION */
+/* #undef HAVE_SIGTIMEDWAIT */
 /* #undef HAVE_SA_SIGACTION */
 /* #undef HAVE_SETJMP */
 /* #undef HAVE_NANOSLEEP */

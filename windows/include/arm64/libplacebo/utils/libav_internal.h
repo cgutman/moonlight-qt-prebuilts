@@ -30,6 +30,7 @@
 #include <libavutil/imgutils.h>
 #include <libavutil/pixdesc.h>
 #include <libavutil/display.h>
+#include <libavformat/version.h>
 #include <libavcodec/version.h>
 
 // Try importing <vulkan.h> dynamically if it wasn't already
@@ -39,14 +40,12 @@
 # endif
 #endif
 
-#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(57, 8, 100) && \
-    defined(PL_HAVE_VULKAN) && defined(VK_API_VERSION_1_2)
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 11, 100) && \
+    defined(PL_HAVE_VULKAN) && defined(VK_API_VERSION_1_2) && \
+    VK_HEADER_VERSION >= 175
 # define PL_HAVE_LAV_VULKAN
 # include <libavutil/hwcontext_vulkan.h>
 # include <libplacebo/vulkan.h>
-# if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 11, 100)
-#  define PL_HAVE_LAV_VULKAN_V2
-# endif
 #endif
 
 PL_LIBAV_API enum pl_color_system pl_system_from_av(enum AVColorSpace spc)
@@ -256,6 +255,33 @@ PL_LIBAV_API enum AVChromaLocation pl_chroma_to_av(enum pl_chroma_location loc)
 
     return AVCHROMA_LOC_UNSPECIFIED;
 }
+
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(60, 11, 100)
+PL_LIBAV_API enum pl_alpha_mode pl_alpha_from_av(enum AVAlphaMode mode)
+{
+    switch (mode) {
+    case AVALPHA_MODE_UNSPECIFIED:   return PL_ALPHA_UNKNOWN;
+    case AVALPHA_MODE_STRAIGHT:      return PL_ALPHA_INDEPENDENT;
+    case AVALPHA_MODE_PREMULTIPLIED: return PL_ALPHA_PREMULTIPLIED;
+    case AVALPHA_MODE_NB:            return PL_ALPHA_MODE_COUNT;
+    }
+
+    return PL_ALPHA_UNKNOWN;
+}
+
+PL_LIBAV_API enum AVAlphaMode pl_alpha_to_av(enum pl_alpha_mode mode)
+{
+    switch (mode) {
+    case PL_ALPHA_NONE:             return AVALPHA_MODE_UNSPECIFIED; // missing
+    case PL_ALPHA_UNKNOWN:          return AVALPHA_MODE_UNSPECIFIED;
+    case PL_ALPHA_INDEPENDENT:      return AVALPHA_MODE_STRAIGHT;
+    case PL_ALPHA_PREMULTIPLIED:    return AVALPHA_MODE_PREMULTIPLIED;
+    case PL_ALPHA_MODE_COUNT:       return AVALPHA_MODE_NB;
+    }
+
+    return AVALPHA_MODE_UNSPECIFIED;
+}
+#endif
 
 #ifdef PL_HAVE_LAV_HDR
 PL_LIBAV_API void pl_map_hdr_metadata(struct pl_hdr_metadata *out,
@@ -528,14 +554,6 @@ PL_LIBAV_API int pl_plane_data_from_pixfmt(struct pl_plane_data out_data[4],
     first = true;
     for (int p = 0; p < planes; p++) {
         aligned_data[p] = out_data[p];
-
-        // Planes with only an alpha component should be ignored
-        if (pl_plane_data_num_comps(&aligned_data[p]) == 1 &&
-            aligned_data[p].component_map[0] == PL_CHANNEL_A)
-        {
-            continue;
-        }
-
         if (!pl_plane_data_align(&aligned_data[p], &bits))
             goto misaligned;
 
@@ -665,6 +683,9 @@ PL_LIBAV_API void pl_avframe_set_repr(AVFrame *frame, struct pl_color_repr repr)
 {
     frame->colorspace = pl_system_to_av(repr.sys);
     frame->color_range = pl_levels_to_av(repr.levels);
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(60, 11, 100)
+    frame->alpha_mode = pl_alpha_to_av(repr.alpha);
+#endif
 
     // No real way to map repr.bits, the image format already has to match
 }
@@ -711,8 +732,12 @@ PL_LIBAV_API void pl_frame_from_avframe(struct pl_frame *out,
             .sys = pl_system_from_av(frame->colorspace),
             .levels = pl_levels_from_av(frame->color_range),
             .alpha = (desc->flags & AV_PIX_FMT_FLAG_ALPHA)
-                        ? PL_ALPHA_INDEPENDENT
-                        : PL_ALPHA_NONE,
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(60, 11, 100)
+                ? pl_alpha_from_av(frame->alpha_mode)
+#else
+                ? PL_ALPHA_INDEPENDENT
+#endif
+                : PL_ALPHA_NONE,
 
             // For sake of simplicity, just use the first component's depth as
             // the authoritative color depth for the whole image. Usually, this
@@ -1073,11 +1098,7 @@ static bool pl_acquire_avframe(pl_gpu gpu, struct pl_frame *frame)
     AVVulkanFramesContext *vkfc = hwfc->hwctx;
     AVVkFrame *vkf = (AVVkFrame *) priv->avframe->data[0];
 
-#ifdef PL_HAVE_LAV_VULKAN_V2
     vkfc->lock_frame(hwfc, vkf);
-#else
-    (void) vkfc;
-#endif
 
     for (int n = 0; n < frame->num_planes; n++) {
         pl_vulkan_release_ex(gpu, pl_vulkan_release_params(
@@ -1120,11 +1141,46 @@ static void pl_release_avframe(pl_gpu gpu, struct pl_frame *frame)
             break;
     }
 
-#ifdef PL_HAVE_LAV_VULKAN_V2
     vkfc->unlock_frame(hwfc, vkf);
-#else
-    (void) vkfc;
-#endif
+}
+
+static VkFormat map_vk_fmt(const AVVulkanFramesContext *vkfc, VkFormat fmt,
+                           struct pl_bit_encoding *bits)
+{
+    if (!(vkfc->img_flags & VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT))
+        return fmt;
+
+    switch (fmt) {
+#define VK_FMT_CASE(SHIFT, OLDFMT, NEWFMT) \
+    case VK_FORMAT_##OLDFMT: bits->bit_shift = SHIFT; return VK_FORMAT_##NEWFMT
+
+    VK_FMT_CASE(6, R10X6_UNORM_PACK16,                         R16_UNORM);
+    VK_FMT_CASE(6, R10X6G10X6_UNORM_2PACK16,                   R16G16_UNORM);
+    VK_FMT_CASE(6, R10X6G10X6B10X6A10X6_UNORM_4PACK16,         R16G16B16A16_UNORM);
+    VK_FMT_CASE(6, G10X6B10X6G10X6R10X6_422_UNORM_4PACK16,     G16B16G16R16_422_UNORM);
+    VK_FMT_CASE(6, B10X6G10X6R10X6G10X6_422_UNORM_4PACK16,     B16G16R16G16_422_UNORM);
+    VK_FMT_CASE(6, G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16, G16_B16_R16_3PLANE_420_UNORM);
+    VK_FMT_CASE(6, G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16,  G16_B16R16_2PLANE_420_UNORM);
+    VK_FMT_CASE(6, G10X6_B10X6_R10X6_3PLANE_422_UNORM_3PACK16, G16_B16_R16_3PLANE_422_UNORM);
+    VK_FMT_CASE(6, G10X6_B10X6R10X6_2PLANE_422_UNORM_3PACK16,  G16_B16R16_2PLANE_422_UNORM);
+    VK_FMT_CASE(6, G10X6_B10X6_R10X6_3PLANE_444_UNORM_3PACK16, G16_B16_R16_3PLANE_444_UNORM);
+    VK_FMT_CASE(6, G10X6_B10X6R10X6_2PLANE_444_UNORM_3PACK16,  G16_B16R16_2PLANE_444_UNORM);
+
+    VK_FMT_CASE(4, R12X4_UNORM_PACK16,                         R16_UNORM);
+    VK_FMT_CASE(4, R12X4G12X4_UNORM_2PACK16,                   R16G16_UNORM);
+    VK_FMT_CASE(4, R12X4G12X4B12X4A12X4_UNORM_4PACK16,         R16G16B16A16_UNORM);
+    VK_FMT_CASE(4, G12X4B12X4G12X4R12X4_422_UNORM_4PACK16,     G16B16G16R16_422_UNORM);
+    VK_FMT_CASE(4, B12X4G12X4R12X4G12X4_422_UNORM_4PACK16,     B16G16R16G16_422_UNORM);
+    VK_FMT_CASE(4, G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16, G16_B16_R16_3PLANE_420_UNORM);
+    VK_FMT_CASE(4, G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16,  G16_B16R16_2PLANE_420_UNORM);
+    VK_FMT_CASE(4, G12X4_B12X4_R12X4_3PLANE_422_UNORM_3PACK16, G16_B16_R16_3PLANE_422_UNORM);
+    VK_FMT_CASE(4, G12X4_B12X4R12X4_2PLANE_422_UNORM_3PACK16,  G16_B16R16_2PLANE_422_UNORM);
+    VK_FMT_CASE(4, G12X4_B12X4_R12X4_3PLANE_444_UNORM_3PACK16, G16_B16_R16_3PLANE_444_UNORM);
+    VK_FMT_CASE(4, G12X4_B12X4R12X4_2PLANE_444_UNORM_3PACK16,  G16_B16R16_2PLANE_444_UNORM);
+
+    default: return fmt;
+#undef VK_FMT_CASE
+    }
 }
 
 static bool pl_map_avframe_vulkan(pl_gpu gpu, struct pl_frame *out,
@@ -1134,14 +1190,9 @@ static bool pl_map_avframe_vulkan(pl_gpu gpu, struct pl_frame *out,
     const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(hwfc->sw_format);
     const AVVulkanFramesContext *vkfc = hwfc->hwctx;
     AVVkFrame *vkf = (AVVkFrame *) frame->data[0];
+    const VkFormat *vk_fmt = vkfc->format;
     struct pl_avframe_priv *priv = out->user_data;
     pl_vulkan vk = pl_vulkan_get(gpu);
-
-#ifdef PL_HAVE_LAV_VULKAN_V2
-    const VkFormat *vk_fmt = vkfc->format;
-#else
-    const VkFormat *vk_fmt = av_vkfmt_from_pixfmt(hwfc->sw_format);
-#endif
 
     assert(frame->format == AV_PIX_FMT_VULKAN);
     priv->planar = NULL;
@@ -1158,7 +1209,7 @@ static bool pl_map_avframe_vulkan(pl_gpu gpu, struct pl_frame *out,
             .image  = vkf->img[n],
             .width  = AV_CEIL_RSHIFT(hwfc->width, chroma ? desc->log2_chroma_w : 0),
             .height = AV_CEIL_RSHIFT(hwfc->height, chroma ? desc->log2_chroma_h : 0),
-            .format = vk_fmt[n],
+            .format = map_vk_fmt(vkfc, vk_fmt[n], &out->repr.bits),
             .usage  = vkfc->usage,
         ));
         if (!plane->texture)

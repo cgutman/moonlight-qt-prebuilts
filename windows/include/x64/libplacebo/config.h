@@ -23,7 +23,7 @@
 
 // Increased any time the API changes. (Note: Does not reset when PL_MAJOR_VER
 // is increased)
-#define PL_API_VER 349
+#define PL_API_VER 357
 
 // Increased any time a fix is made to a given API version.
 #define PL_FIX_VER (pl_fix_ver())
@@ -37,11 +37,11 @@
 #undef PL_HAVE_D3D11
 #define PL_HAVE_DOVI 1
 #define PL_HAVE_GL_PROC_ADDR 1
-#define PL_HAVE_GLSLANG 1
+#undef PL_HAVE_GLSLANG
 #undef PL_HAVE_LCMS
 #undef PL_HAVE_LIBDOVI
 #undef PL_HAVE_OPENGL
-#undef PL_HAVE_SHADERC
+#define PL_HAVE_SHADERC 1
 #undef PL_HAVE_VK_PROC_ADDR
 #define PL_HAVE_VULKAN 1
 #undef PL_HAVE_XXHASH

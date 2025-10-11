@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -463,6 +463,7 @@ extern DECLSPEC int SDLCALL SDL_AndroidShowToast(const char* message, int durati
  *
  * \param command user command that must be greater or equal to 0x8000.
  * \param param user parameter.
+ * \returns 0 on success, otherwise -1.
  *
  * \since This function is available since SDL 2.0.22.
  */

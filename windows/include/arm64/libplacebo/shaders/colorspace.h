@@ -49,7 +49,8 @@ PL_API void pl_shader_dovi_reshape(pl_shader sh, const struct pl_dovi_metadata *
 // Note: This function always returns PC-range RGB with independent alpha.
 // It mutates the pl_color_repr to reflect the change.
 //
-// Note: For DCDM XYZ decoding output is linear
+// Note: For DCDM XYZ decoding input is expected to be linear, use
+// `pl_shader_linearize` before calling this function.
 PL_API void pl_shader_decode_color(pl_shader sh, struct pl_color_repr *repr,
                                    const struct pl_color_adjustment *params);
 
@@ -89,6 +90,9 @@ PL_API extern const struct pl_sigmoid_params pl_sigmoid_default_params;
 // ringing artifacts during upscaling by bringing the color information closer
 // to neutral and away from the extremes. If `params` is NULL, it defaults to
 // &pl_sigmoid_default_params.
+//
+// For more information about sigmoidization, see:
+//   https://imagemagick.org/Usage/resize/#resize_sigmoidal
 //
 // Warning: This function clamps the input to the interval [0,1]; and as such
 // it should *NOT* be used on already-decoded high-dynamic range content.
